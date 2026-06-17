@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public class ChatRoomDTOs {
+public class ChatDTO {
 
-    public record CreateRoomRequest(
+    public record CreateChatRequest(
             @NotBlank(message = "Nome da sala é obrigatório")
             String name,
 
@@ -24,18 +24,18 @@ public class ChatRoomDTOs {
             Set<Long> userIds
     ) {}
 
-    public record RoomMemberResponse(
+    public record ChatMemberResponse(
             Long id,
             String name,
             String email
     ) {}
 
-    public record ChatRoomResponse(
+    public record ChatResponse(
             Long id,
             String name,
             String description,
             LocalDateTime createdAt,
-            RoomMemberResponse createdBy,
-            List<RoomMemberResponse> members
+            ChatMemberResponse createdBy,
+            List<ChatMemberResponse> members
     ) {}
 }

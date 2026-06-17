@@ -1,10 +1,10 @@
 package br.ifsp.ctrltcc.mapper;
 
-import br.ifsp.ctrltcc.dto.chat.ChatMessageDTOs.ChatMessageResponse;
-import br.ifsp.ctrltcc.dto.chat.ChatRoomDTOs.ChatRoomResponse;
-import br.ifsp.ctrltcc.dto.chat.ChatRoomDTOs.RoomMemberResponse;
-import br.ifsp.ctrltcc.model.ChatMessage;
-import br.ifsp.ctrltcc.model.ChatRoom;
+import br.ifsp.ctrltcc.dto.chat.MessageDTO.MessageResponse;
+import br.ifsp.ctrltcc.dto.chat.ChatDTO.ChatResponse;
+import br.ifsp.ctrltcc.dto.chat.ChatDTO.ChatMemberResponse;
+import br.ifsp.ctrltcc.model.Message;
+import br.ifsp.ctrltcc.model.Chat;
 import br.ifsp.ctrltcc.model.User;
 import org.springframework.stereotype.Component;
 
@@ -14,34 +14,34 @@ import java.util.List;
 @Component
 public class ChatMapper {
 
-    public RoomMemberResponse toMemberResponse(User user) {
-        return new RoomMemberResponse(user.getId(), user.getName(), user.getEmail());
+    public ChatMemberResponse toMemberResponse(User user) {
+        return new ChatMemberResponse(user.getId(), user.getName(), user.getEmail());
     }
 
-    public ChatRoomResponse toRoomResponse(ChatRoom room) {
-        List<RoomMemberResponse> members = room.getMembers().stream()
+    public ChatResponse toChatResponse(Chat chat) {
+        List<ChatMemberResponse> members = chat.getMembers().stream()
                 .map(this::toMemberResponse)
-                .sorted(Comparator.comparing(RoomMemberResponse::name))
+                .sorted(Comparator.comparing(ChatMemberResponse::name))
                 .toList();
 
-        return new ChatRoomResponse(
-                room.getId(),
-                room.getName(),
-                room.getDescription(),
-                room.getCreatedAt(),
-                toMemberResponse(room.getCreatedBy()),
+        return new ChatResponse(
+                chat.getId(),
+                chat.getName(),
+                chat.getDescription(),
+                chat.getCreatedAt(),
+                toMemberResponse(chat.getCreatedBy()),
                 members
         );
     }
 
-    public ChatMessageResponse toMessageResponse(ChatMessage message) {
-        return new ChatMessageResponse(
+    public MessageResponse toMessageResponse(Message message) {
+        return new MessageResponse(
                 message.getId(),
                 message.getContent(),
                 message.getSentAt(),
                 message.getSender().getId(),
                 message.getSender().getName(),
-                message.getRoom().getId()
+                message.getChat().getId()
         );
     }
 }

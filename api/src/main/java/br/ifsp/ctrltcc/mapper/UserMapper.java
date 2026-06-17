@@ -1,7 +1,7 @@
 package br.ifsp.ctrltcc.mapper;
 
-import br.ifsp.ctrltcc.dto.user.CreateUserRequest;
-import br.ifsp.ctrltcc.dto.user.UserResponse;
+import br.ifsp.ctrltcc.dto.user.UserDTO.CreateUserRequest;
+import br.ifsp.ctrltcc.dto.user.UserDTO.UserResponse;
 import br.ifsp.ctrltcc.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,6 @@ public class UserMapper {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /** CreateUserRequest → nova entidade User (senha já encodada). */
     public User toEntity(CreateUserRequest req) {
         return new User(
                 req.email(),
@@ -25,7 +24,6 @@ public class UserMapper {
         );
     }
 
-    /** User → UserResponse (sem dados sensíveis). */
     public UserResponse toResponse(User user) {
         return new UserResponse(
                 user.getId(),

@@ -6,8 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "chat_rooms")
-public class ChatRoom {
+public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +26,8 @@ public class ChatRoom {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "chat_room_members",
-            joinColumns = @JoinColumn(name = "room_id"),
+            name = "chat__members",
+            joinColumns = @JoinColumn(name = "chat_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> members = new HashSet<>();
@@ -38,9 +37,9 @@ public class ChatRoom {
         this.createdAt = LocalDateTime.now();
     }
 
-    public ChatRoom() {}
+    public Chat() {}
 
-    public ChatRoom(String name, String description, User createdBy) {
+    public Chat(String name, String description, User createdBy) {
         this.name = name;
         this.description = description;
         this.createdBy = createdBy;

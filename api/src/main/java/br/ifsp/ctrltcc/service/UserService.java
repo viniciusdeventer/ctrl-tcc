@@ -1,9 +1,9 @@
 package br.ifsp.ctrltcc.service;
 
-import br.ifsp.ctrltcc.dto.user.ChangePasswordRequest;
-import br.ifsp.ctrltcc.dto.user.CreateUserRequest;
-import br.ifsp.ctrltcc.dto.user.UpdateUserRequest;
-import br.ifsp.ctrltcc.dto.user.UserResponse;
+import br.ifsp.ctrltcc.dto.user.UserDTO.ChangePasswordRequest;
+import br.ifsp.ctrltcc.dto.user.UserDTO.CreateUserRequest;
+import br.ifsp.ctrltcc.dto.user.UserDTO.UpdateUserRequest;
+import br.ifsp.ctrltcc.dto.user.UserDTO.UserResponse;
 import br.ifsp.ctrltcc.exception.EmailAlreadyExistsException;
 import br.ifsp.ctrltcc.exception.ResourceNotFoundException;
 import br.ifsp.ctrltcc.mapper.UserMapper;
@@ -31,8 +31,6 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    // ── Create ────────────────────────────────────────────────────────────────
-
     public UserResponse create(CreateUserRequest req) {
         if (userRepository.existsByEmail(req.email())) {
             throw new EmailAlreadyExistsException(req.email());
@@ -40,8 +38,6 @@ public class UserService {
         User user = userMapper.toEntity(req);
         return userMapper.toResponse(userRepository.save(user));
     }
-
-    // ── Read ──────────────────────────────────────────────────────────────────
 
     @Transactional(readOnly = true)
     public List<UserResponse> findAll() {
@@ -54,8 +50,6 @@ public class UserService {
     public UserResponse findById(Long id) {
         return userMapper.toResponse(getOrThrow(id));
     }
-
-    // ── Update ────────────────────────────────────────────────────────────────
 
     public UserResponse update(Long id, UpdateUserRequest req) {
         User user = getOrThrow(id);
@@ -82,16 +76,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // ── Delete ────────────────────────────────────────────────────────────────
-
     public void delete(Long id) {
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("Usuário não encontrado: " + id);
         }
         userRepository.deleteById(id);
     }
-
-    // ── Helper ────────────────────────────────────────────────────────────────
 
     private User getOrThrow(Long id) {
         return userRepository.findById(id)

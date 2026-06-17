@@ -1,7 +1,7 @@
 package br.ifsp.ctrltcc.service;
 
-import br.ifsp.ctrltcc.dto.auth.LoginRequest;
-import br.ifsp.ctrltcc.dto.auth.LoginResponse;
+import br.ifsp.ctrltcc.dto.auth.AuthDTO.LoginRequest;
+import br.ifsp.ctrltcc.dto.auth.AuthDTO.LoginResponse;
 import br.ifsp.ctrltcc.mapper.AuthMapper;
 import br.ifsp.ctrltcc.model.User;
 import br.ifsp.ctrltcc.repository.UserRepository;

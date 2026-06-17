@@ -4,23 +4,21 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
-public class ChatMessageDTOs {
+public class MessageDTO {
 
-    // ── Request (enviado via STOMP) ───────────────────────────────────────────
 
     public record SendMessageRequest(
             @NotBlank(message = "Conteúdo da mensagem é obrigatório")
             String content
     ) {}
 
-    // ── Response (broadcast STOMP + histórico REST) ───────────────────────────
 
-    public record ChatMessageResponse(
+    public record MessageResponse(
             Long id,
             String content,
             LocalDateTime sentAt,
             Long senderId,
             String senderName,
-            Long roomId
+            Long chatId
     ) {}
 }

@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chat_messages")
-public class ChatMessage {
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,29 +21,39 @@ public class ChatMessage {
     private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "room_id", nullable = false)
-    private ChatRoom room;
+    @JoinColumn(name = "chat_id", nullable = false)
+    private Chat chat;
 
     @PrePersist
     private void prePersist() {
         this.sentAt = LocalDateTime.now();
     }
 
-    public ChatMessage() {}
+    public Message() {}
 
-    public ChatMessage(String content, User sender, ChatRoom room) {
+    public Message(String content, User sender, Chat chat) {
         this.content = content;
         this.sender = sender;
-        this.room = room;
+        this.chat = chat;
     }
 
-    public Long getId() { return id; }
+    public Long getId() { 
+    	return id; 
+    }
 
-    public String getContent() { return content; }
+    public String getContent() { 
+    	return content; 
+    }
 
-    public LocalDateTime getSentAt() { return sentAt; }
+    public LocalDateTime getSentAt() { 
+    	return sentAt; 
+    }
 
-    public User getSender() { return sender; }
+    public User getSender() { 
+    	return sender; 
+    }
 
-    public ChatRoom getRoom() { return room; }
+    public Chat getChat() { 
+    	return chat; 
+	}
 }
