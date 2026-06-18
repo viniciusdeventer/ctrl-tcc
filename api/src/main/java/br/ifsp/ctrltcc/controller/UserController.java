@@ -1,9 +1,9 @@
 package br.ifsp.ctrltcc.controller;
 
-import br.ifsp.ctrltcc.dto.user.ChangePasswordRequest;
-import br.ifsp.ctrltcc.dto.user.CreateUserRequest;
-import br.ifsp.ctrltcc.dto.user.UpdateUserRequest;
-import br.ifsp.ctrltcc.dto.user.UserResponse;
+import br.ifsp.ctrltcc.dto.user.UserDTO.ChangePasswordRequest;
+import br.ifsp.ctrltcc.dto.user.UserDTO.CreateUserRequest;
+import br.ifsp.ctrltcc.dto.user.UserDTO.UpdateUserRequest;
+import br.ifsp.ctrltcc.dto.user.UserDTO.UserResponse;
 import br.ifsp.ctrltcc.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // POST /api/users  — apenas ADMIN (SecurityConfig)
     @PostMapping
     public ResponseEntity<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
         UserResponse created = userService.create(request);
@@ -33,19 +32,16 @@ public class UserController {
         return ResponseEntity.created(location).body(created);
     }
 
-    // GET /api/users
     @GetMapping
     public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    // GET /api/users/{id}
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 
-    // PUT /api/users/{id}  — ADMIN ou próprio usuário
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<UserResponse> update(
@@ -54,7 +50,6 @@ public class UserController {
         return ResponseEntity.ok(userService.update(id, request));
     }
 
-    // PATCH /api/users/{id}/password
     @PatchMapping("/{id}/password")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<Void> changePassword(
@@ -64,7 +59,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE /api/users/{id}  — apenas ADMIN (SecurityConfig)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);

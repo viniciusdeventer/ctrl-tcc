@@ -1,4 +1,4 @@
-package br.ifsp.taskmaster;
+package br.ifsp.ctrltcc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

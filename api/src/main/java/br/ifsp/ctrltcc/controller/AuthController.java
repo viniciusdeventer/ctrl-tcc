@@ -1,7 +1,7 @@
 package br.ifsp.ctrltcc.controller;
 
-import br.ifsp.ctrltcc.dto.auth.LoginRequest;
-import br.ifsp.ctrltcc.dto.auth.LoginResponse;
+import br.ifsp.ctrltcc.dto.auth.AuthDTO.LoginRequest;
+import br.ifsp.ctrltcc.dto.auth.AuthDTO.LoginResponse;
 import br.ifsp.ctrltcc.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
