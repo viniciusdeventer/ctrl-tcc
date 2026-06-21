@@ -23,7 +23,7 @@ public class AuthDTO {
 	        String name,
 	        String email,
 	        String role
-
+	        
 	) {
 
 		public LoginResponse(String token, Long id, String name, String email, String role) {
