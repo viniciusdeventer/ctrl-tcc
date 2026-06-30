@@ -4,7 +4,6 @@ import br.ifsp.ctrltcc.dto.project.ProjectDTO.ProjectResponse;
 import br.ifsp.ctrltcc.exception.AccessDeniedException;
 import br.ifsp.ctrltcc.exception.ResourceNotFoundException;
 import br.ifsp.ctrltcc.mapper.ProjectMapper;
-import br.ifsp.ctrltcc.model.Chat;
 import br.ifsp.ctrltcc.model.Project;
 import br.ifsp.ctrltcc.model.Proposal;
 import br.ifsp.ctrltcc.repository.ProjectRepository;
@@ -20,20 +19,29 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ProposalService proposalService;
     private final ProjectMemberService projectMemberService;
+    private final ChatServiceClient chatServiceClient;
     private final ProjectMapper projectMapper;
 
     public ProjectService(
             ProjectRepository projectRepository,
             ProposalService proposalService,
             ProjectMemberService projectMemberService,
+            ChatServiceClient chatServiceClient,
             ProjectMapper projectMapper
     ) {
         this.projectRepository = projectRepository;
         this.proposalService = proposalService;
         this.projectMemberService = projectMemberService;
+        this.chatServiceClient = chatServiceClient;
         this.projectMapper = projectMapper;
     }
 
+    /**
+     * Aceita a proposta, persiste o Project e chama o microsservico de Communication
+     * para criar o Chat correspondente. O chatId retornado é armazenado no Project
+     * para que o monolito consiga referenciar o chat sem depender do microsservico
+     * a cada leitura.
+     */
     public ProjectResponse acceptProposalAndCreateProject(Long proposalId, Long advisorId) {
         Proposal proposal = proposalService.findById(proposalId);
 
@@ -44,9 +52,11 @@ public class ProjectService {
         proposal.accept();
 
         Project project = new Project(proposal);
-        project.attachChat(new Chat(project));
-
         project = projectRepository.save(project);
+
+        Long chatId = chatServiceClient.createChatForProject(project.getId());
+        project.setChatId(chatId);
+
         return projectMapper.toResponse(project);
     }
 

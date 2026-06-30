@@ -32,13 +32,14 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectMember> members = new ArrayList<>();
 
-    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Chat chat;
+    // Referencia externa ao Chat criado no microsservico de Communication.
+    // Nao e FK — o chat existe num banco separado.
+    @Column(name = "chat_id")
+    private Long chatId;
 
     @PrePersist
     private void prePersist() {
         createdAt = LocalDateTime.now();
-        status = ProjectStatus.ACTIVE;
     }
 
     protected Project() {
@@ -53,6 +54,7 @@ public class Project {
         this.proposal = proposal;
         this.title = proposal.getTitle();
         this.description = proposal.getDescription();
+        this.status = ProjectStatus.ACTIVE;
         addMember(proposal.getAdvisor(), ProjectRole.ADVISOR);
         addMember(proposal.getStudent(), ProjectRole.STUDENT);
     }
@@ -100,8 +102,12 @@ public class Project {
         return members.stream().anyMatch(m -> m.getUser().getId().equals(userId));
     }
 
-    public void attachChat(Chat chat) {
-        this.chat = chat;
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
+    }
+
+    public Long getChatId() {
+        return chatId;
     }
 
     public Long getId() {
@@ -138,9 +144,5 @@ public class Project {
 
     public List<ProjectMember> getMembers() {
         return members;
-    }
-
-    public Chat getChat() {
-        return chat;
     }
 }

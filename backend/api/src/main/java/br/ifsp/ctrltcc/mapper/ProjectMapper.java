@@ -24,7 +24,7 @@ public class ProjectMapper {
                 project.getStatus(),
                 project.getCreatedAt(),
                 members,
-                project.getChat() != null ? project.getChat().getId() : null
+                project.getChatId()
         );
     }
 
